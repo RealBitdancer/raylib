@@ -4397,7 +4397,7 @@ void rlUpdateShaderBuffer(unsigned int id, const void *data, unsigned int dataSi
 // Get SSBO buffer size
 unsigned int rlGetShaderBufferSize(unsigned int id)
 {
-    long long size = 0;
+    GLint64 size = 0;
 
 #if defined(GRAPHICS_API_OPENGL_43)
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, id);
@@ -4993,7 +4993,8 @@ static int rlGetPixelDataSize(int width, int height, int format)
         default: break;
     }
 
-    dataSize = width*height*bpp/8;  // Total data size in bytes
+    double bytesPerPixel = (double)bpp/8.0;
+    dataSize = (int)(bytesPerPixel*width*height); // Total data size in bytes
 
     // Most compressed formats works on 4x4 blocks,
     // if texture is smaller, minimum dataSize is 8 or 16
