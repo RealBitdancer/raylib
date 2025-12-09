@@ -518,7 +518,9 @@ const char *TextFormat(const char *text, ...); // Formatting of text with variab
 #endif // !SUPPORT_MODULE_RTEXT
 
 #if defined(PLATFORM_DESKTOP)
-    #define PLATFORM_DESKTOP_GLFW
+    //#define PLATFORM_DESKTOP_GLFW
+    //#define PLATFORM_DESKTOP_WIN32
+    #define PLATFORM_DESKTOP_SAL
 #endif
 
 // We're using '#pragma message' because '#warning' is not adopted by MSVC
@@ -541,6 +543,8 @@ const char *TextFormat(const char *text, ...); // Formatting of text with variab
 // Include platform-specific submodules
 #if defined(PLATFORM_DESKTOP_GLFW)
     #include "platforms/rcore_desktop_glfw.c"
+#elif defined(PLATFORM_DESKTOP_SAL)
+    #include "platforms/rcore_desktop_sal.c"
 #elif defined(PLATFORM_DESKTOP_SDL)
     #include "platforms/rcore_desktop_sdl.c"
 #elif (defined(PLATFORM_DESKTOP_RGFW) || defined(PLATFORM_WEB_RGFW))
@@ -1664,6 +1668,11 @@ float GetFrameTime(void)
 void WaitTime(double seconds)
 {
     if (seconds < 0) return;    // Security check
+
+#if defined(PLATFORM_DESKTOP_SAL) && defined(SUPPORT_PARTIALBUSY_WAIT_LOOP)
+    salWaitTime(platform.context, seconds);
+    return;
+#endif
 
 #if defined(SUPPORT_BUSY_WAIT_LOOP) || defined(SUPPORT_PARTIALBUSY_WAIT_LOOP)
     double destinationTime = GetTime() + seconds;
@@ -3763,7 +3772,7 @@ void InitTimer(void)
     // However, it can also reduce overall system performance, because the thread scheduler switches tasks more often
     // High resolutions can also prevent the CPU power management system from entering power-saving modes
     // Setting a higher resolution does not improve the accuracy of the high-resolution performance counter
-#if defined(_WIN32) && defined(SUPPORT_WINMM_HIGHRES_TIMER) && !defined(SUPPORT_BUSY_WAIT_LOOP) && !defined(PLATFORM_DESKTOP_SDL)
+#if defined(_WIN32) && defined(SUPPORT_WINMM_HIGHRES_TIMER) && !defined(SUPPORT_BUSY_WAIT_LOOP) && !defined(PLATFORM_DESKTOP_SDL) && !defined(PLATFORM_DESKTOP_SAL)
     timeBeginPeriod(1); // Setup high-resolution timer to 1ms (granularity of 1-2 ms)
 #endif
 

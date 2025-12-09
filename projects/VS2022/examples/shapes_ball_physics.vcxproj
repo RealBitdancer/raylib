@@ -51,7 +51,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6B1A933E-71B8-4C1F-9E79-02D98830E671}</ProjectGuid>
+    <ProjectGuid>{4F1DCC97-3D3F-49CE-8ABE-DE99257F0C47}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>shapes_ball_physics</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>

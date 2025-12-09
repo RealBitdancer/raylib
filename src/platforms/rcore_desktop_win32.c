@@ -1230,7 +1230,7 @@ void SwapScreenBuffer(void)
 // Get elapsed time measure in seconds
 double GetTime(void)
 {
-    LARGE_INTEGER now = 0;
+    LARGE_INTEGER now = {0};
     QueryPerformanceCounter(&now);
     return (double)(now.QuadPart - CORE.Time.base)/(double)platform.timerFrequency.QuadPart;
 }
