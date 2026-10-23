@@ -1998,7 +1998,7 @@ char *TextInsert(const char *text, const char *insert, int position)
         if (position > textLen) position = textLen; // End of text string
         int insertLen = TextLength(insert);
 
-        if ((textLen + insertLen) < (MAX_TEXT_BUFFER_LENGTH - 1))
+        if ((textLen + insertLen) <= (MAX_TEXT_BUFFER_LENGTH - 1))
         {
             for (int i = 0; i < position; i++) buffer[i] = text[i];
             for (int i = 0; i < insertLen; i++) buffer[i+position] = insert[i];
