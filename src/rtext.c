@@ -1809,7 +1809,7 @@ char *TextReplace(const char *text, const char *search, const char *replacement)
         insertPoint = (char *)text;
         for (count = 0; (tempPtr = strstr(insertPoint, search)); count++) insertPoint = tempPtr + searchLen;
 
-        if ((textLen + count*(replaceLen - searchLen)) < (MAX_TEXT_BUFFER_LENGTH - 1))
+        if ((textLen + count*(replaceLen - searchLen)) <= (MAX_TEXT_BUFFER_LENGTH - 1))
         {
             tempPtr = buffer; // Point to result start
 
@@ -1935,7 +1935,7 @@ char *TextReplaceBetween(const char *text, const char *begin, const char *end, c
                 int replaceLen = (replacement == NULL)? 0 : TextLength(replacement);
                 //int toreplaceLen = endIndex - beginIndex - beginLen;
 
-                if ((beginIndex + beginLen + replaceLen + (textLen - endIndex)) < (MAX_TEXT_BUFFER_LENGTH - 1))
+                if ((beginIndex + beginLen + replaceLen + (textLen - endIndex)) <= (MAX_TEXT_BUFFER_LENGTH - 1))
                 {
                     strncpy(buffer, text, beginIndex + beginLen); // Copy first text part
                     if (replacement != NULL) strncpy(buffer + beginIndex + beginLen, replacement, replaceLen); // Copy replacement (if provided)
