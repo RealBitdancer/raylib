@@ -394,6 +394,9 @@ void ProcessGestureEvent(GestureEvent event)
 
             // NOTE: Angle should be inverted in Y
             GESTURES.Pinch.angle = 360.0f - rgVector2Angle(GESTURES.Touch.moveDownPositionA, GESTURES.Touch.moveDownPositionB);
+
+            GESTURES.Touch.previousPositionA = GESTURES.Touch.moveDownPositionA;
+            GESTURES.Touch.previousPositionB = GESTURES.Touch.moveDownPositionB;
         }
         else if (event.touchAction == TOUCH_ACTION_UP)
         {

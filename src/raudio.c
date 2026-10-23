@@ -583,7 +583,11 @@ AudioBuffer *LoadAudioBuffer(ma_format format, ma_uint32 channels, ma_uint32 sam
         return NULL;
     }
 
-    if (sizeInFrames > 0) audioBuffer->data = (unsigned char *)RL_CALLOC(sizeInFrames*channels*ma_get_bytes_per_sample(format), 1);
+    if (sizeInFrames > 0)
+    {
+        audioBuffer->data = (unsigned char *)RL_CALLOC(sizeInFrames*channels*ma_get_bytes_per_sample(format), 1);
+        if (audioBuffer->data != NULL) ma_silence_pcm_frames(audioBuffer->data, sizeInFrames, format, channels);
+    }
 
     // Audio data runs through a format converter
     ma_data_converter_config converterConfig = ma_data_converter_config_init(format, AUDIO_DEVICE_FORMAT, channels, AUDIO_DEVICE_CHANNELS, sampleRate, AUDIO.System.device.sampleRate);
@@ -2462,11 +2466,10 @@ static ma_uint32 ReadAudioBufferFramesInInternalFormat(AudioBuffer *audioBuffer,
         }
     }
 
-    // Zero-fill excess
     ma_uint32 totalFramesRemaining = (frameCount - framesRead);
     if (totalFramesRemaining > 0)
     {
-        memset((unsigned char *)framesOut + (framesRead*frameSizeInBytes), 0, totalFramesRemaining*frameSizeInBytes);
+        ma_silence_pcm_frames((unsigned char *)framesOut + (framesRead*frameSizeInBytes), totalFramesRemaining, audioBuffer->converter.formatIn, audioBuffer->converter.channelsIn);
 
         // For static buffers, fill the remaining frames with silence for safety, but don't report those
         // frames as "read"; The reason for this is that the caller uses the return value
@@ -2760,10 +2763,9 @@ static void UpdateAudioStreamInLockedState(AudioStream stream, const void *data,
                 ma_uint32 bytesToWrite = framesToWrite*stream.channels*(stream.sampleSize/8);
                 memcpy(subBuffer, data, bytesToWrite);
 
-                // Any leftover frames should be filled with zeros
                 ma_uint32 leftoverFrameCount = subBufferSizeInFrames - framesToWrite;
 
-                if (leftoverFrameCount > 0) memset(subBuffer + bytesToWrite, 0, leftoverFrameCount*stream.channels*(stream.sampleSize/8));
+                if (leftoverFrameCount > 0) ma_silence_pcm_frames(subBuffer + bytesToWrite, leftoverFrameCount, stream.buffer->converter.formatIn, stream.channels);
 
                 stream.buffer->isSubBufferProcessed[subBufferToUpdate] = false;
             }

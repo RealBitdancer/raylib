@@ -4333,7 +4333,7 @@ void ImageDrawImagePro(Image *dst, Image src, Rectangle srcRec, Rectangle dstRec
         bool blendRequired = true;
 
         // Fast path: Avoid blend if source has no alpha to blend
-        if ((tint.a == 255) &&
+        if ((tint.r == 255) && (tint.g == 255) && (tint.b == 255) && (tint.a == 255) &&
             ((srcPtr->format == PIXELFORMAT_UNCOMPRESSED_GRAYSCALE) ||
             (srcPtr->format == PIXELFORMAT_UNCOMPRESSED_R5G6B5) ||
             (srcPtr->format == PIXELFORMAT_UNCOMPRESSED_R8G8B8) ||

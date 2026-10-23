@@ -2246,6 +2246,8 @@ int FileCopy(const char *srcPath, const char *dstPath)
 
     if (result == 0) // Directory created successfully or already exists
     {
+        result = -1;
+
         if ((srcFileData != NULL) && (srcDataSize > 0))
         {
             bool saved = SaveFileData(dstPath, srcFileData, srcDataSize);
@@ -2276,7 +2278,11 @@ int FileMove(const char *srcPath, const char *dstPath)
                 result = FileRemove(srcPath);
                 if (result != 0) TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to remove source file after copy", srcPath);
             }
-            else TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to copy file to [%s]", srcPath, dstPath);
+            else
+            {
+                result = -1;
+                TRACELOG(LOG_WARNING, "FILEIO: [%s] Failed to copy file to [%s]", srcPath, dstPath);
+            }
         }
     }
 	else TRACELOG(LOG_WARNING, "FILEIO: [%s] Source file does not exist", srcPath);
