@@ -55,3 +55,7 @@ if (${BUILD_EXAMPLES})
 endif()
 
 enable_testing()
+
+if(BUILD_TESTS)
+  add_subdirectory(tests)
+endif()

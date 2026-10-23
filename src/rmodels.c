@@ -2389,7 +2389,7 @@ void UpdateModelAnimationBonesEx(Model model, ModelAnimation animA, float frameA
         (blend >= 0.0f) && (blend <= 1.0f))
     {
         // Inter-frame interpolation values for first animation
-        int currentFrameA = (int)frameA%animA.keyframeCount;
+        int currentFrameA = (int)frameA;
         int nextFrameA = currentFrameA + 1;
         float blendA = frameA - currentFrameA;
         blendA = Clamp(blendA, 0.0f, 1.0f);
@@ -2397,7 +2397,7 @@ void UpdateModelAnimationBonesEx(Model model, ModelAnimation animA, float frameA
         if (nextFrameA >= animA.keyframeCount) nextFrameA = nextFrameA%animA.keyframeCount;
 
         // Inter-frame interpolation values for second animation
-        int currentFrameB = (int)frameB%animB.keyframeCount;
+        int currentFrameB = (int)frameB;
         int nextFrameB = currentFrameB + 1;
         float blendB = frameB - currentFrameB;
         blendB = Clamp(blendB, 0.0f, 1.0f);
